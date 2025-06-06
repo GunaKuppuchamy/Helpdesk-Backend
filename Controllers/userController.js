@@ -4,8 +4,8 @@ const Ticket = require('../Models/tickets');
 
 // POST - create a new ticket
 const addticket= async (req, res) => {
+  console.log("called");
   try {
-
     const newTicket = new Ticket(req.body);
     const saved = await newTicket.save();
     res.status(201).json({ message: 'Ticket created', data: saved });
