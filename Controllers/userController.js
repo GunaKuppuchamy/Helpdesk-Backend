@@ -27,7 +27,7 @@ const getticket=async (req, res) => {
 // GET - fetch single ticket by ID
 const getbyid = async (req, res) => {
   try {
-    const ticket = await Ticket.findById(req.params.id);
+    const ticket = await Ticket.findOne({ ticketid: req.params.id });
     if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
     res.status(200).json(ticket);
   } catch (err) {
@@ -38,7 +38,7 @@ const getbyid = async (req, res) => {
 // PUT - update a ticket by ID
 const putbyid = async (req, res) => {
   try {
-    const updatedTicket = await Ticket.findByIdAndUpdate(req.params.id, req.body);
+    const updatedTicket = await Ticket.findOneAndUpdate({ticketid : req.params.id}, req.body, { new: true }  );
     if (!updatedTicket) return res.status(404).json({ message: 'Ticket not found' });
     res.status(200).json({ message: 'Ticket updated', data: updatedTicket });
   } catch (err) {
@@ -57,4 +57,22 @@ const deletebyid = async (req, res) => {
   }
 };
 
-module.exports = {addticket,getticket,getbyid,putbyid,deletebyid};
+
+//User Tickets - Fetch all ticket for a User
+const getuserticket = async(req,res) => {
+
+  try
+  {
+    const tickets = await Ticket.find({userid:req.params.userid});
+     if (!tickets.length) {
+      return res.status(404).json({ message: 'No tickets found for this user' });
+    }
+    res.status(200).json(tickets)
+  }
+  catch (err)
+  {
+    res.status(500).json({message:'Error fetching user tickets' , error:err.message});
+  }
+};
+
+module.exports = {addticket,getticket,getbyid,putbyid,deletebyid,getuserticket};

@@ -25,5 +25,9 @@ router.delete("/deleteby/:id",userController.deletebyid);
 //To login
 // router.post("/login",logincontroller.login);
 
+//To get user tickets
+router.get('/tickets/user/:userid', userController.getuserticket);
+
+
 module.exports=router;
 
