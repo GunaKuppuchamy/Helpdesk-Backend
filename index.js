@@ -1,16 +1,21 @@
-const express=require('express');
-const mongoose=require('mongoose');
-const cors=require('cors');
-const routes=require('./Routes/route')
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const routes = require('./Routes/route');
+const cookieParser = require('cookie-parser');
 
-const url="mongodb+srv://team5:12345@helpdesk.auegrbh.mongodb.net/helpdesk";
-mongoose.connect(url).then(()=>{
-    const app=express();
+const url = "mongodb+srv://team5:12345@helpdesk.auegrbh.mongodb.net/helpdesk";
+mongoose.connect(url).then(() => {
+    const app = express();
     console.log("connected");
-    app.use(cors())
+    app.use(cors({
+        origin: 'http://localhost:4200',
+        credentials: true
+    }));
+    app.use(cookieParser())
     app.use(express.json())
-    app.use("/",routes)
-    app.listen(3002,()=>{
+    app.use("/", routes)
+    app.listen(3002, () => {
         console.log("Success");
     })
 })

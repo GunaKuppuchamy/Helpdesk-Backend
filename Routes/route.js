@@ -13,17 +13,26 @@ router.post("/addticket",userController.addticket);
 //To get tickets
 router.get("/getticket",userController.getticket);
 
-//To get by id
-router.get("/getby/:id",userController.getbyid);
+//To get ticker by id
+router.get("/getuser/:id",userController.getbyid);
 
 //To update by id
-router.put("/putby/:id",userController.putbyid);
+router.put("/updateuser/:id",userController.putbyid);
 
 //To delete by id
-router.delete("/deleteby/:id",userController.deletebyid);
+router.delete("/delete/:id",userController.deletebyid);
 
 //To login
-// router.post("/login",logincontroller.login);
+router.post("/login",logincontroller.login);
+
+//To refresh access Token
+router.post("/refresktk",logincontroller.refreshToken);
+
+//To clear cookie while logout
+router.post("/logout",logincontroller.logout);
+
+//middleware to verify token
+router.post("/middleware",logincontroller.middleWare);
 
 module.exports=router;
 
