@@ -22,4 +22,41 @@ const createUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser };
+const deleteUser=async(req,res)=>{
+try {
+    const deleted = await User.deleteOne({empid:req.params.empId });
+if (deleted.deletedCount === 0) {
+      return res.status(404).json({ message: 'User not found' });
+    }    res.status(200).json({ message: 'User deleted' });
+  } catch (err) {
+    res.status(500).json({ message: 'Error in deleting User', error: err.message });
+  }
+}
+
+//To Update User Detail
+const updateUser=async (req,res)=>{
+  // console.log("called");
+  try {
+    const {empid,name,email,password,phoneno,bu,role}=req.body;
+
+      const updatedUser = await User.updateOne({empid:req.params.empId}, {empid:empid,name:name,email:email,password:password,phoneno:phoneno,bu:bu,role:role});
+      if (updatedUser.modifiedCount===0) {
+        return res.status(404).json({ message: 'User not found or no any modified data' });
+      }
+      res.status(200).json({ message: 'User updated', data: updatedUser });
+    } catch (err) {
+      res.status(500).json({ message: 'Error in updating user', error: err.message });
+    }
+}
+
+//To get All users details
+const getUser=async (req,res)=>{
+  try{
+  const users=await User.find();
+  return res.status(200).json(users);
+  }catch(err){
+    return res.status(500).json({ message: 'Error in fetching Users', error: err.message });
+  }
+}
+
+module.exports = { createUser, deleteUser, updateUser, getUser };
