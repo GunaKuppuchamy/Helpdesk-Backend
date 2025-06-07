@@ -14,7 +14,7 @@ router.post("/addticket",userController.addticket);
 router.get("/getticket",userController.getticket);
 
 //To get ticker by id
-router.get("/getuser/:id",userController.getbyid);
+router.get("/getTicket/:id",userController.getbyid);
 
 //To update by id
 router.put("/updateTicket/:id",userController.putbyid);
@@ -45,6 +45,9 @@ router.delete("/deleteUser/:empId",adminController.deleteUser);
 
 //To update  User Detail
 router.put("/updateUser/:empId",adminController.updateUser);
+
+//To get User By Id
+router.get("/getUserByID/:empid",adminController.getUserById);
 
 module.exports=router;
 

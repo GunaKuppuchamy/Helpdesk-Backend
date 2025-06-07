@@ -59,4 +59,16 @@ const getUser=async (req,res)=>{
   }
 }
 
-module.exports = { createUser, deleteUser, updateUser, getUser };
+//get User By Id
+const getUserById = async (req,res) =>{
+  try{
+    const user = await User.findOne({empid:req.params.empid});
+    return res.status(200).json(user);
+  }
+  catch(err)
+  {
+    return res.status(500).json({message : 'Error While fetching user By ID',error : err.message})
+  }
+}
+
+module.exports = { createUser, deleteUser, updateUser, getUser , getUserById};
