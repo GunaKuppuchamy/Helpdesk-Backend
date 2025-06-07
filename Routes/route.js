@@ -17,7 +17,7 @@ router.get("/getticket",userController.getticket);
 router.get("/getuser/:id",userController.getbyid);
 
 //To update by id
-router.put("/updateuser/:id",userController.putbyid);
+router.put("/updateTicket/:id",userController.putbyid);
 
 //To delete by id
 router.delete("/delete/:id",userController.deletebyid);
@@ -37,6 +37,14 @@ router.post("/middleware",logincontroller.middleWare);
 //To get user tickets
 router.get('/tickets/user/:userid', userController.getuserticket);
 
+//To get all User Details
+router.get("/getUsers",adminController.getUser);
+
+//To delete  User 
+router.delete("/deleteUser/:empId",adminController.deleteUser);
+
+//To update  User Detail
+router.put("/updateUser/:empId",adminController.updateUser);
 
 module.exports=router;
 
