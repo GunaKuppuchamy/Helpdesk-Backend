@@ -109,4 +109,22 @@ const getuserticket = async(req,res) => {
   }
 };
 
-module.exports = {addticket,getticket,getbyid,putbyid,deletebyid,getuserticket};
+
+//It Team Tickets - Fetch all ticket for a User
+const getItTicket = async(req,res) => {
+
+  try
+  {
+    const tickets = await Ticket.find({itid:req.params.itid});
+     if (!tickets.length) {
+      return res.status(404).json({ message: 'No tickets found for this user' });
+    }
+    res.status(200).json(tickets)
+  }
+  catch (err)
+  {
+    res.status(500).json({message:'Error fetching user tickets' , error:err.message});
+  }
+};
+
+module.exports = {addticket,getticket,getbyid,putbyid,deletebyid,getuserticket,getItTicket};

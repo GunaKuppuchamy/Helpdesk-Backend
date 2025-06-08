@@ -37,6 +37,9 @@ router.post("/middleware",logincontroller.middleWare);
 //To get user tickets
 router.get('/tickets/user/:userid', userController.getuserticket);
 
+//To get It team tickets
+router.get('/tickets/it/:itid', userController.getItTicket);
+
 //To get all User Details
 router.get("/getUsers",adminController.getUser);
 
