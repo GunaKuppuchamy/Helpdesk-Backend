@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Ticket = require('../Models/tickets');
+const nodemailer = require('nodemailer');
+const user=require('../Models/employees');
+
 
 // POST - create a new ticket
 const addticket= async (req, res) => {
@@ -40,6 +43,37 @@ const putbyid = async (req, res) => {
   try {
     const updatedTicket = await Ticket.findOneAndUpdate({ticketid : req.params.id}, req.body, { new: true }  );
     if (!updatedTicket) return res.status(404).json({ message: 'Ticket not found' });
+
+    //email if closed
+    if(req.body.status==='closed')
+    {
+      const userRecord = await user.findOne({ empid: updatedTicket.userid });
+      if(userRecord && userRecord.email)
+      {
+        let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: 'itteamilink@gmail.com',
+          pass: 'aehl cdqf zxai rgud' 
+        }
+      });
+    
+
+      const mailOptions = {
+        from: 'itteamilink@gmail.com',
+        to: userRecord.email, 
+        subject: `Ticket ${updatedTicket.ticketid} Closed`,
+        text: `Your ticket "${updatedTicket.subject}" has been closed. Thank you for using Helpdesk.`
+      };
+
+      await transporter.sendMail(mailOptions);
+      console.log("Email sent for closed ticket.");
+    }
+    }
+    else {
+        console.warn(`No user found or email missing for empid: ${updatedTicket.userid}`);
+      }
+
     res.status(200).json({ message: 'Ticket updated', data: updatedTicket });
   } catch (err) {
     res.status(500).json({ message: 'Error updating ticket', error: err.message });
