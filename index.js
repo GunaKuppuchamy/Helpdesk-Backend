@@ -10,11 +10,12 @@ mongoose.connect(url).then(() => {
     console.log("connected");
     app.use(cors({
         origin: 'http://localhost:4200',
-        credentials: true
+        credentials: true,
     }));
-    app.use(cookieParser())
+    
     app.use(express.json())
-    app.use("/", routes);
+    app.use(cookieParser())
+    app.use("/", routes)
     app.listen(3002, () => {
         console.log("Success");
     })
