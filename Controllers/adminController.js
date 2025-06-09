@@ -3,6 +3,7 @@ const bcrypt=require('bcryptjs');
 
 
 const createUser = async (req, res) => {
+  // console.log(req.body);
   const { empid, name, email, password, phoneno, bu, role } = req.body;
   if (!empid || !name || !email || !password ||!phoneno || !bu ||!role) {
     return res.status(400).json({ message: 'All fields are required' });
@@ -59,4 +60,27 @@ const getUser=async (req,res)=>{
   }
 }
 
-module.exports = { createUser, deleteUser, updateUser, getUser };
+//get User By Id
+const getUserById = async (req,res) =>{
+  try{
+    const user = await User.findOne({empid:req.params.empid});
+    return res.status(200).json(user);
+  }
+  catch(err)
+  {
+    return res.status(500).json({message : 'Error While fetching user By ID',error : err.message})
+  }
+}
+
+//get It members
+const getItMembers=async (req,res)=>{
+  try{
+   const itMembers=await User.find({role:'it'});
+   return res.json(itMembers)
+  }catch(err)
+  {
+    return res.status(500).json({message : 'Error While fetching user',error : err.message})
+  }
+}
+
+module.exports = { createUser, deleteUser, updateUser, getUser , getUserById,getItMembers};
