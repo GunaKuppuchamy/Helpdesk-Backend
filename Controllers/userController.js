@@ -97,8 +97,10 @@ const getuserticket = async(req,res) => {
 
   try
   {
-    const tickets = await Ticket.find({userid:req.params.userid});
-     if (!tickets.length) {
+    console.log(req.user.empid);
+    const tickets = await Ticket.find({userid:req.user.empid});
+    console.log(tickets)
+     if (tickets.length===0) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
     res.status(200).json(tickets)

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'key_to_authenticate';
-const REFRESH_SECRET_KEY='yek_terces_hserfer'
+const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt=require('bcryptjs');
 
@@ -39,40 +39,40 @@ User.findOne({email:email}).then(
 )
 };
 
-const refreshToken = (req, res) => {
+const refreshToken = (req, res, next) => {
   const refreshToken = req.cookies.refresh_token;
   if (!refreshToken) {
     return res.status(401).json({ message: 'Refresh token missing' });
   }
   jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
     if (err) {
-        return res.json({ message: 'Invalid or expired refresh token' });
+      return res.json({ message: 'Invalid or expired refresh token' });
     }
-    const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, {expiresIn: '2m'});
+    const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '2m' });
     res.cookie('access_token', newAccessToken, {
-      httpOnly: true,
-      secure: false, 
-      sameSite: 'Strict',
+      httpOnly: false,
+      secure: false,
+      sameSite: 'none',
       maxAge: 2 * 60 * 1000,
     });
-
-    return res.json({ message: 'Access token refreshed' });
+    next();
+    // return res.json({ message: 'Access token refreshed' });
   });
 };
 
 const logout = (req, res) => {
-     res.clearCookie('access_token', {
-    httpOnly: true,
-    secure: false, 
-    sameSite: 'Strict',
+  res.clearCookie('access_token', {
+    httpOnly: false,
+    secure: false,
+    sameSite: 'none',
   });
 
   res.clearCookie('refresh_token', {
-    httpOnly: true,
-    secure: false, 
-    sameSite: 'Strict',
+    httpOnly: false,
+    secure: false,
+    sameSite: 'none',
   });
-    return res.json({ message: 'Logged out successfully' });
+  return res.json({ message: 'Logged out successfully' });
 
 };
 
