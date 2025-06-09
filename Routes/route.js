@@ -43,5 +43,14 @@ router.delete("/deleteUser/:empId",adminController.deleteUser);
 //To update  User Detail
 router.put("/updateUser/:empId",adminController.updateUser);
 
+//To send OTP
+router.post("/sendotp",logincontroller.sendOtp);
+
+//To verify OTP
+router.post("/verify-otp", logincontroller.verifyOtp);
+
+//To reset password
+router.post("/reset-password", logincontroller.resetPassword);
+
 module.exports=router;
 
