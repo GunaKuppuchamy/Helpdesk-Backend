@@ -53,13 +53,13 @@ router.delete("/deleteUser/:empId",adminController.deleteUser);
 router.put("/updateUser/:empId",adminController.updateUser);
 
 //To send OTP
-router.post("/sendotp",logincontroller.sendOtp);
+// router.post("/sendotp",logincontroller.sendOtp);
 
 //To verify OTP
-router.post("/verify-otp", logincontroller.verifyOtp);
+// router.post("/verify-otp", logincontroller.verifyOtp);
 
 //To reset password
-router.post("/reset-password", logincontroller.resetPassword);
+// router.post("/reset-password", logincontroller.resetPassword);
 //To get User By Id
 router.get("/getUserByID/:empid",adminController.getUserById);
 
