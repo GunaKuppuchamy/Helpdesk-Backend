@@ -27,8 +27,7 @@ router.post("/logout",logincontroller.logout);
 
 //middleware to verify token
 router.post("/middleware",logincontroller.middleWare);
-//To get user tickets
-// router.get('/tickets/user/:userid',mware, userController.getuserticket);
+
 router.get('/tickets/user',logincontroller.middleWare, userController.getuserticket);
 
 //To get It team tickets
@@ -52,14 +51,7 @@ router.delete("/deleteUser/:empId",adminController.deleteUser);
 //To update  User Detail
 router.put("/updateUser/:empId",adminController.updateUser);
 
-//To send OTP
-// router.post("/sendotp",logincontroller.sendOtp);
 
-//To verify OTP
-// router.post("/verify-otp", logincontroller.verifyOtp);
-
-//To reset password
-// router.post("/reset-password", logincontroller.resetPassword);
 //To get User By Id
 router.get("/getUserByID/:empid",adminController.getUserById);
 
