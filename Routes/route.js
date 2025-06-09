@@ -75,5 +75,10 @@ router.post("/middleware",logincontroller.middleWare);
 //To refresh access Token
 // router.post("/refresktk",logincontroller.refreshToken);
 
+
+router.post('/sendotp', logincontroller.sendOtp);
+router.post('/verifyotp', logincontroller.verifyOtp);
+router.post('/resetpassword', logincontroller.resetPassword);
+
 module.exports=router;
 
