@@ -4,7 +4,6 @@ const Ticket = require('../Models/tickets');
 
 // POST - create a new ticket
 const addticket= async (req, res) => {
-  console.log("called");
   try {
     const newTicket = new Ticket(req.body);
     const saved = await newTicket.save();
@@ -63,9 +62,7 @@ const getuserticket = async(req,res) => {
 
   try
   {
-    console.log(req.user.empid);
     const tickets = await Ticket.find({userid:req.user.empid});
-    console.log(tickets)
      if (tickets.length===0) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
@@ -80,10 +77,10 @@ const getuserticket = async(req,res) => {
 
 //It Team Tickets - Fetch all ticket for a User
 const getItTicket = async(req,res) => {
-
   try
   {
-    const tickets = await Ticket.find({itid:req.params.itid});
+   const itId=req.userid
+    const tickets = await Ticket.find({itid:itId});
      if (!tickets.length) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }

@@ -3,15 +3,10 @@ const SECRET_KEY = 'key_to_authenticate';
 const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
-const cookieParser = require('cookie-parser');
-
 
 
 const login = async (req, res) => {
-
   const { email, password, role } = req.body;
-  // console.log(req.body);
-
   try {
     const credentials = await User.findOne({ email: email, role: role });
 
@@ -38,45 +33,31 @@ const login = async (req, res) => {
     res.cookie('refresh_token', refreshToken, {
       maxAge: 10 * 60 * 1000,
     });
-    // console.log("logged");
     return res.status(200).json({ message: 'Logged in successfully' });
   } catch (error) {
-    console.error('Login error:', error);
     return res.status(500).json({ message: 'Server error' });
   }
 };
 
 
-
-
-
-
-
-
-
 const middleWare = (req, res, next) => {
-  console.log("MWC")
-
   const token = req.cookies.access_token;
-  console.log(token)
   if (!token) {
-    const refreshToken = cookieParser(req.cookies.refresh_token);
-      console.log(refreshToken)
+    const refreshToken = req.cookies.refresh_token;
 
     if (!refreshToken) {
       return res.status(401).json({ message: 'Refresh token missing' });
     }
     jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
-      // console.log(user);
       if (err) {
         return res.json({ message: 'Invalid or expired refresh token' });
       }
-      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
+      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '10m' });
       res.cookie('access_token', newAccessToken, {
-        maxAge: 1 * 60 * 1000,
+        maxAge: 10 * 60 * 1000,
       });
-      console.log(user);
-      next();
+      req.userid = user.empid;
+      return next();
       // return res.json({ message: 'Access token refreshed' });
     });
   } else {
@@ -84,10 +65,9 @@ const middleWare = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired access token' });
       }
-      // req.user = user;
-      console.log(user);
-      next();
-      return res.status(200).json({ message: 'valid' });
+      req.userid = user.empid;
+      return next();
+      // return res.status(200).json({ message: 'valid' });
     });
   }
 
@@ -127,16 +107,4 @@ const logout = (req, res) => {
 
 };
 
-
-
-
-
-
-
 module.exports = { login, refreshToken, logout, middleWare }
-
-
-
-
-
-

@@ -5,19 +5,19 @@ const userController = require('../Controllers/userController');
 const logincontroller=require('../Controllers/loginController')
 
 //To add Empoloyee
-router.post("/addemp",logincontroller.middleWare);
+router.post("/addemp",logincontroller.middleWare,adminController.createUser);
 
 //To add new ticket
 router.post("/addticket",userController.addticket);
 
 //To get tickets
-router.get("/getticket",userController.getticket);
+router.get("/getticket",logincontroller.middleWare,userController.getticket);
 
 //To get ticker by id
 router.get("/getuser/:id",userController.getbyid);
 
 //To update by id
-router.put("/updateTicket/:id",userController.putbyid);
+router.put("/updateTicket/:id",logincontroller.middleWare);
 
 //To delete by id
 router.delete("/delete/:id",userController.deletebyid);
@@ -32,19 +32,19 @@ router.post("/middleware",logincontroller.middleWare);
 router.get('/tickets/user',logincontroller.middleWare, userController.getuserticket);
 
 //To get It team tickets
-router.get('/tickets/it/:itid', userController.getItTicket);
+router.get('/tickets/it',logincontroller.middleWare, userController.getItTicket);
 
 //To get It members
 router.get('/itMembers',adminController.getItMembers)
 
 //To get all User Details
-router.get("/getUsers",adminController.getUser);
+router.get("/getUsers",logincontroller.middleWare,adminController.getUser);
 
 //To delete  User 
 router.delete("/deleteUser/:empId",adminController.deleteUser);
 
 //To update  User Detail
-router.put("/updateUser/:empId",adminController.updateUser);
+router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updateUser);
 
 //To send OTP
 // router.post("/sendotp",logincontroller.sendOtp);
