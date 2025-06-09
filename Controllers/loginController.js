@@ -75,7 +75,8 @@ const middleWare = (req, res, next) => {
       res.cookie('access_token', newAccessToken, {
         maxAge: 1 * 60 * 1000,
       });
-      console.log(user);
+      req.userid = user.empid; 
+      console.log("User (from refresh):", user);
       next();
       // return res.json({ message: 'Access token refreshed' });
     });
@@ -85,9 +86,10 @@ const middleWare = (req, res, next) => {
         return res.status(401).json({ message: 'Invalid or expired access token' });
       }
       // req.user = user;
-      console.log(user);
+     req.userid = user.empid; 
+      console.log("User (from refresh):", user);
       next();
-      return res.status(200).json({ message: 'valid' });
+      //return res.status(200).json({ message: 'valid' });
     });
   }
 

@@ -5,13 +5,13 @@ const userController = require('../Controllers/userController');
 const logincontroller=require('../Controllers/loginController')
 
 //To add Empoloyee
-router.post("/addemp",logincontroller.middleWare);
+router.post("/addemp",logincontroller.middleWare,adminController.createUser);
 
 //To add new ticket
-router.post("/addticket",userController.addticket);
+router.post("/addticket",logincontroller.middleWare,userController.addticket);
 
 //To get tickets
-router.get("/getticket",userController.getticket);
+router.get("/getticket",logincontroller.middleWare,userController.getticket);
 
 //To get ticker by id
 router.get("/getTicket/:id",userController.getbyid);
@@ -32,13 +32,13 @@ router.post("/middleware",logincontroller.middleWare);
 router.get('/tickets/user',logincontroller.middleWare, userController.getuserticket);
 
 //To get It team tickets
-router.get('/tickets/it/:itid', userController.getItTicket);
+router.get('/tickets/it',logincontroller.middleWare, userController.getItTicket);
 
 //To get It members
 router.get('/itMembers',adminController.getItMembers)
 
-//To get user tickets
-router.get('/tickets/user/:userid', userController.getuserticket);
+// //To get user tickets
+// router.get('/tickets/user/:userid', userController.getuserticket);
 
 //To get It team tickets
 router.get('/tickets/it/:itid', userController.getItTicket);
