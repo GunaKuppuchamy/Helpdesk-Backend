@@ -97,7 +97,27 @@ const getuserticket = async(req,res) => {
 
   try
   {
-    const tickets = await Ticket.find({userid:req.params.userid});
+    console.log(req.user.empid);
+    const tickets = await Ticket.find({userid:req.user.empid});
+    console.log(tickets)
+     if (tickets.length===0) {
+      return res.status(404).json({ message: 'No tickets found for this user' });
+    }
+    res.status(200).json(tickets)
+  }
+  catch (err)
+  {
+    res.status(500).json({message:'Error fetching user tickets' , error:err.message});
+  }
+};
+
+
+//It Team Tickets - Fetch all ticket for a User
+const getItTicket = async(req,res) => {
+
+  try
+  {
+    const tickets = await Ticket.find({itid:req.params.itid});
      if (!tickets.length) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
@@ -109,4 +129,4 @@ const getuserticket = async(req,res) => {
   }
 };
 
-module.exports = {addticket,getticket,getbyid,putbyid,deletebyid,getuserticket};
+module.exports = {addticket,getticket,getbyid,putbyid,deletebyid,getuserticket,getItTicket};
