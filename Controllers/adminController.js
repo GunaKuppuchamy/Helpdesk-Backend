@@ -49,7 +49,7 @@ const updateUser=async (req,res)=>{
 }
 
 //To get All users details
-const getUser=async (req,res)=>{
+const getUsers=async (req,res)=>{
   try{
   const users=await User.find();
   return res.status(200).json(users);
@@ -83,6 +83,6 @@ const getItMembers=async (req,res)=>{
 }
 
 
-module.exports = { createUser, deleteUser, updateUser, getUser , getUserById,getItMembers};
+module.exports = { createUser, deleteUser, updateUser, getUsers , getUserById,getItMembers};
 
 // module.exports = { createUser, deleteUser, updateUser, getUser , getUserById};

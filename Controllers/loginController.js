@@ -28,7 +28,7 @@ const login = async (req, res) => {
     const payload = { empid: credentials.empid, email: credentials.email };
 
     const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1m' });
-    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '10m' });
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '3m' });
 
     // Set cookies
     res.cookie('access_token', accessToken, {
@@ -36,7 +36,7 @@ const login = async (req, res) => {
     });
 
     res.cookie('refresh_token', refreshToken, {
-      maxAge: 10 * 60 * 1000,
+      maxAge: 3 * 60 * 1000,
     });
     // console.log("logged");
     return res.status(200).json({ message: 'Logged in successfully',role: credentials.role,empid: credentials.empid  });
@@ -100,17 +100,10 @@ const refreshToken = (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie('access_token', {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'none',
-  });
-
-  res.clearCookie('refresh_token', {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'none',
-  });
+  console.log("Logout called");
+  // Clear cookies
+   res.clearCookie('access_token');
+  res.clearCookie('refresh_token');
   return res.json({ message: 'Logged out successfully' });
 
 };

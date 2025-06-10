@@ -42,7 +42,7 @@ const getbyid = async (req, res) => {
 };
 
 // PUT - update a ticket by ID
-const putbyid = async (req, res) => {
+const updateTicketById = async (req, res) => {
   try {
     const updatedTicket = await Ticket.findOneAndUpdate({ticketid : req.params.id}, req.body, { new: true }  );
     if (!updatedTicket) return res.status(404).json({ message: 'Ticket not found' });
@@ -84,19 +84,19 @@ const putbyid = async (req, res) => {
 };
 
 // DELETE - delete a ticket by ID
-const deletebyid = async (req, res) => {
-  try {
-    const deleted = await Ticket.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: 'Ticket not found' });
-    res.status(200).json({ message: 'Ticket deleted' });
-  } catch (err) {
-    res.status(500).json({ message: 'Error deleting ticket', error: err.message });
-  }
-};
+// const deletebyid = async (req, res) => {
+//   try {
+//     const deleted = await Ticket.findByIdAndDelete(req.params.id);
+//     if (!deleted) return res.status(404).json({ message: 'Ticket not found' });
+//     res.status(200).json({ message: 'Ticket deleted' });
+//   } catch (err) {
+//     res.status(500).json({ message: 'Error deleting ticket', error: err.message });
+//   }
+// };
 
 
 //User Tickets - Fetch all ticket for a User
-const getuserticket = async(req,res) => {
+const getUserTickets = async(req,res) => {
 
   try
   {
@@ -139,4 +139,4 @@ const getItTicket = async(req, res) => {
 
 
 
-module.exports = {addticket,getticket,getbyid,putbyid,deletebyid,getuserticket,getItTicket};
+module.exports = {addticket,getticket,getbyid,updateTicketById,getUserTickets,getItTicket};
