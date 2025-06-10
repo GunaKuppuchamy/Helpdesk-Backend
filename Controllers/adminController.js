@@ -3,7 +3,6 @@ const bcrypt=require('bcryptjs');
 
 
 const createUser = async (req, res) => {
-  // console.log(req.body);
   const { empid, name, email, password, phoneno, bu, role } = req.body;
   if (!empid || !name || !email || !password ||!phoneno || !bu ||!role) {
     return res.status(400).json({ message: 'All fields are required' });
@@ -36,7 +35,6 @@ if (deleted.deletedCount === 0) {
 
 //To Update User Detail
 const updateUser=async (req,res)=>{
-  // console.log("called");
   try {
     const {empid,name,email,password,phoneno,bu,role}=req.body;
 
@@ -51,7 +49,7 @@ const updateUser=async (req,res)=>{
 }
 
 //To get All users details
-const getUser=async (req,res)=>{
+const getUsers=async (req,res)=>{
   try{
   const users=await User.find();
   return res.status(200).json(users);
@@ -85,6 +83,6 @@ const getItMembers=async (req,res)=>{
 }
 
 
-module.exports = { createUser, deleteUser, updateUser, getUser , getUserById,getItMembers};
+module.exports = { createUser, deleteUser, updateUser, getUsers , getUserById,getItMembers};
 
 // module.exports = { createUser, deleteUser, updateUser, getUser , getUserById};
