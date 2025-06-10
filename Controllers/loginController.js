@@ -92,7 +92,7 @@ const token = req.cookies.access_token;
     // req.user=user;
     // next(); 
   });
-};
+};    
 
 //OTP
 
@@ -104,10 +104,14 @@ const sendOtp = async (req, res) => {
     
     let targetUser = await ForgotUser.findOne({ email });
 
-
     if (!targetUser) {
-      return res.status(404).json({ message: 'User not found' });
+      const tempPassword = await bcrypt.hash('temp123', 10);
+      targetUser = new ForgotUser({ email, password: tempPassword });
     }
+
+    // if (!targetUser) {
+    //   return res.status(404).json({ message: 'User not found' });
+    // }
 
     targetUser.otp = otp;
     targetUser.otpTimestamp = new Date();
@@ -136,6 +140,7 @@ const sendOtp = async (req, res) => {
 };
 
 
+
  const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
@@ -144,8 +149,8 @@ const sendOtp = async (req, res) => {
     if (!targetUser || targetUser.otp !== otp) return res.json({ valid: false });
 
     const now = new Date();
-    const diff = (now - targetUser.otpTimestamp) / 1000; // seconds
-    if (diff > 300) return res.json({ valid: false }); // 5 minutes
+    const diff = (now - targetUser.otpTimestamp) / 1000; // to convert to seconds
+    if (diff > 300) return res.json({ valid: false }); // will expire after 5 minutes
 
     res.json({ valid: true });
 
@@ -164,7 +169,7 @@ const sendOtp = async (req, res) => {
     if (!targetUser) return res.status(404).send('User not found');
     
     const hashedPassword = await bcrypt.hash(newPassword, 10);
-    // console.log(newPassword);
+    console.log(newPassword);
     targetUser.password = hashedPassword;
         // console.log(hashedPassword,'hash');
 
@@ -174,6 +179,7 @@ const sendOtp = async (req, res) => {
     
     await targetUser.save();
     // console.log(targetUser,'TargetuserAfter sAVE');
+
    res.status(200).json({ message: 'Password Updated successfully' });
   } catch (err) {
     console.error(err);
