@@ -17,7 +17,7 @@ router.get("/getticket",logincontroller.middleWare,userController.getticket);
 router.get("/getTicket/:id",userController.getbyid);
 
 //To update by id
-router.put("/updateTicket/:id",logincontroller.middleWare);
+router.put("/updateTicket/:id",logincontroller.middleWare,logincontroller.middleWare);
 
 //To delete by id
 router.delete("/delete/:id",userController.deletebyid);
@@ -27,8 +27,8 @@ router.post("/logout",logincontroller.logout);
 
 //middleware to verify token
 router.post("/middleware",logincontroller.middleWare);
+
 //To get user tickets
-// router.get('/tickets/user/:userid',mware, userController.getuserticket);
 router.get('/tickets/user',logincontroller.middleWare, userController.getuserticket);
 
 //To get It team tickets
@@ -47,7 +47,7 @@ router.get('/tickets/it/:itid', userController.getItTicket);
 router.get("/getUsers",logincontroller.middleWare,adminController.getUser);
 
 //To delete  User 
-router.delete("/deleteUser/:empId",adminController.deleteUser);
+router.delete("/deleteUser/:empId",logincontroller.middleWare,adminController.deleteUser);
 
 //To update  User Detail
 router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updateUser);
@@ -72,8 +72,7 @@ router.post("/login",logincontroller.login);
 //middleware to verify token
 router.post("/middleware",logincontroller.middleWare);
 
-//To refresh access Token
-// router.post("/refresktk",logincontroller.refreshToken);
+
 
 
 router.post('/sendotp', logincontroller.sendOtp);

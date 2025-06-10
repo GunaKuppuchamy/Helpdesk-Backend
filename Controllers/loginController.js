@@ -3,13 +3,9 @@ const SECRET_KEY = 'key_to_authenticate';
 const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
-<<<<<<< HEAD
-
-=======
 const cookieParser = require('cookie-parser');
 const ForgotUser=require('../Models/User')
 const nodemailer=require('../nodemailer-config')
->>>>>>> Thanzia
 
 const login = async (req, res) => {
   const { email, password, role } = req.body;
@@ -28,12 +24,12 @@ const login = async (req, res) => {
 
     const payload = { empid: credentials.empid, email: credentials.email };
 
-    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '10m' });
+    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1m' });
     const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '10m' });
 
     // Set cookies
     res.cookie('access_token', accessToken, {
-      maxAge: 10 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
 
     res.cookie('refresh_token', refreshToken, {
@@ -56,20 +52,15 @@ const middleWare = (req, res, next) => {
     }
     jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
       if (err) {
-        return res.json({ message: 'Invalid or expired refresh token' });
+        return res.status(401).json({ message: 'Invalid or expired refresh token' });
       }
-      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '10m' });
+      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
       res.cookie('access_token', newAccessToken, {
-        maxAge: 10 * 60 * 1000,
+        maxAge: 1 * 60 * 1000,
       });
-<<<<<<< HEAD
-      req.userid = user.empid;
-      return next();
-=======
       req.userid = user.empid; 
-      console.log("User (from refresh):", user);
+      // console.log("User (from refresh):", user);
       next();
->>>>>>> Thanzia
       // return res.json({ message: 'Access token refreshed' });
     });
   } else {
@@ -77,20 +68,11 @@ const middleWare = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired access token' });
       }
-<<<<<<< HEAD
       req.userid = user.empid;
-      return next();
-      // return res.status(200).json({ message: 'valid' });
-=======
-      // req.user = user;
-     req.userid = user.empid; 
-      console.log("User (from refresh):", user);
       next();
-      //return res.status(200).json({ message: 'valid' });
->>>>>>> Thanzia
+      // return res.status(200).json({ message: 'valid' });
     });
   }
-
 }
 
 const refreshToken = (req, res, next) => {
@@ -127,9 +109,6 @@ const logout = (req, res) => {
 
 };
 
-<<<<<<< HEAD
-module.exports = { login, refreshToken, logout, middleWare }
-=======
 
 //OTP
 
@@ -221,4 +200,3 @@ const sendOtp = async (req, res) => {
 
 
 module.exports={login,refreshToken,logout,middleWare,sendOtp,verifyOtp,resetPassword}
->>>>>>> Thanzia
