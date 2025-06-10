@@ -61,6 +61,9 @@ router.get("/getUserByID/:empid",adminController.getUserById);
 //To login
 router.post("/login",logincontroller.login);
 
+//To logout
+router.post("/logout",logincontroller.logout);
+
 //middleware to verify token
 router.post("/middleware",logincontroller.middleWare);
 

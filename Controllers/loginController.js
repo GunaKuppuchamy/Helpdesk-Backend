@@ -26,17 +26,18 @@ const login = async (req, res) => {
     }
 
     const payload = { empid: credentials.empid, email: credentials.email };
+    console.log(payload);
 
-    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '10m' });
-    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '10m' });
+    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1m' });
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '1m' });
 
     // Set cookies
     res.cookie('access_token', accessToken, {
-      maxAge: 10 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
 
     res.cookie('refresh_token', refreshToken, {
-      maxAge: 10 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
     // console.log("logged");
     return res.status(200).json({ message: 'Logged in successfully',role: credentials.role,empid: credentials.empid  });
@@ -69,7 +70,7 @@ const middleWare = (req, res, next) => {
     jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
       // console.log(user);
       if (err) {
-        return res.json({ message: 'Invalid or expired refresh token' });
+        return res.status(401).json({ message: 'Invalid or expired refresh token' });
       }
       const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
       res.cookie('access_token', newAccessToken, {
