@@ -6,7 +6,7 @@ const user=require('../Models/employees');
 
 
 // POST - create a new ticket
-const addticket= async (req, res) => {
+const addTicket= async (req, res) => {
   try {
     const currentUserId = req.userid;
     if (!currentUserId) {
@@ -21,7 +21,7 @@ const addticket= async (req, res) => {
 };
 
 // // GET - fetch all tickets
-const getticket=async (req, res) => {
+const getTicket=async (req, res) => {
   try {
     const tickets = await Ticket.find();
     res.status(200).json(tickets);
@@ -31,7 +31,7 @@ const getticket=async (req, res) => {
 };
 
 // GET - fetch single ticket by ID
-const getbyid = async (req, res) => {
+const getTicketByid = async (req, res) => {
   try {
     const ticket = await Ticket.findOne({ ticketid: req.params.id });
     if (!ticket) return res.status(404).json({ message: 'Ticket not found' });
@@ -139,4 +139,4 @@ const getItTicket = async(req, res) => {
 
 
 
-module.exports = {addticket,getticket,getbyid,updateTicketById,getUserTickets,getItTicket};
+module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket};

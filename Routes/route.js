@@ -8,13 +8,13 @@ const logincontroller=require('../Controllers/loginController')
 router.post("/addemp",logincontroller.middleWare,adminController.createUser);
 
 //To add new ticket
-router.post("/addticket",logincontroller.middleWare,userController.addticket);
+router.post("/addticket",logincontroller.middleWare,userController.addTicket);
 
 //To get tickets
-router.get("/getticket",logincontroller.middleWare,userController.getticket);
+router.get("/getticket",logincontroller.middleWare,userController.getTicket);
 
 //To get ticket by id
-router.get("/getTicket/:id",logincontroller.middleWare,userController.getbyid);
+router.get("/getTicket/:id",logincontroller.middleWare,userController.getTicketByid);
 
 //To update by id
 router.put("/updateTicket/:id",logincontroller.middleWare,userController.updateTicketById);
@@ -65,16 +65,13 @@ router.post("/login",logincontroller.login);
 //middleware to verify token
 router.post("/middleware",logincontroller.middleWare);
 
-
-
-
+//To Send OTP
 router.post('/sendotp', logincontroller.sendOtp);
-router.post('/verifyotp', logincontroller.verifyOtp);
-router.post('/resetpassword', logincontroller.resetPassword);
 
-
-router.post('/sendotp', logincontroller.sendOtp);
+//To Verify OTP
 router.post('/verifyotp', logincontroller.verifyOtp);
+
+//To Reset Password
 router.post('/resetpassword', logincontroller.resetPassword);
 
 module.exports=router;
