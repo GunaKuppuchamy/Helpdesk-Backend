@@ -82,6 +82,7 @@ const getItMembers=async (req,res)=>{
   }
 }
 
+
 module.exports = { createUser, deleteUser, updateUser, getUser , getUserById,getItMembers};
 
 // module.exports = { createUser, deleteUser, updateUser, getUser , getUserById};

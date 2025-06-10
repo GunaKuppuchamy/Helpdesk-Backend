@@ -52,14 +52,7 @@ router.delete("/deleteUser/:empId",logincontroller.middleWare,adminController.de
 //To update  User Detail
 router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updateUser);
 
-//To send OTP
-// router.post("/sendotp",logincontroller.sendOtp);
 
-//To verify OTP
-// router.post("/verify-otp", logincontroller.verifyOtp);
-
-//To reset password
-// router.post("/reset-password", logincontroller.resetPassword);
 //To get User By Id
 router.get("/getUserByID/:empid",adminController.getUserById);
 
@@ -73,6 +66,11 @@ router.post("/login",logincontroller.login);
 router.post("/middleware",logincontroller.middleWare);
 
 
+
+
+router.post('/sendotp', logincontroller.sendOtp);
+router.post('/verifyotp', logincontroller.verifyOtp);
+router.post('/resetpassword', logincontroller.resetPassword);
 
 
 router.post('/sendotp', logincontroller.sendOtp);

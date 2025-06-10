@@ -8,9 +8,12 @@ const ForgotUser=require('../Models/User')
 const nodemailer=require('../nodemailer-config')
 
 const login = async (req, res) => {
-  const { email, password, role } = req.body;
+
+  const { email, password} = req.body;
+  // console.log(req.body);
+
   try {
-    const credentials = await User.findOne({ email: email, role: role });
+    const credentials = await User.findOne({ email: email});
 
     if (!credentials) {
       return res.status(404).json({ message: 'No user found' });
@@ -35,7 +38,8 @@ const login = async (req, res) => {
     res.cookie('refresh_token', refreshToken, {
       maxAge: 10 * 60 * 1000,
     });
-    return res.status(200).json({ message: 'Logged in successfully' });
+    // console.log("logged");
+    return res.status(200).json({ message: 'Logged in successfully',role: credentials.role,empid: credentials.empid  });
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
@@ -59,7 +63,7 @@ const middleWare = (req, res, next) => {
         maxAge: 1 * 60 * 1000,
       });
       req.userid = user.empid; 
-      // console.log("User (from refresh):", user);
+      console.log("User (from refresh):", user);
       next();
       // return res.json({ message: 'Access token refreshed' });
     });
@@ -68,9 +72,11 @@ const middleWare = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired access token' });
       }
-      req.userid = user.empid;
+      // req.user = user;
+     req.userid = user.empid; 
+      console.log("User (from refresh):", user);
       next();
-      // return res.status(200).json({ message: 'valid' });
+      //return res.status(200).json({ message: 'valid' });
     });
   }
 }
@@ -119,11 +125,15 @@ const sendOtp = async (req, res) => {
     console.log('Generated OTP:', otp);
     
     let targetUser = await ForgotUser.findOne({ email });
-
-
     if (!targetUser) {
-      return res.status(404).json({ message: 'User not found' });
+      const tempPassword = await bcrypt.hash('temp123', 10);
+      targetUser = new ForgotUser({ email, password: tempPassword });
     }
+
+
+    // if (!targetUser) {
+    //   return res.status(404).json({ message: 'User not found' });
+    // }
 
     targetUser.otp = otp;
     targetUser.otpTimestamp = new Date();
