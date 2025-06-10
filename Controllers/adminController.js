@@ -70,6 +70,7 @@ const getUserById = async (req,res) =>{
   }
 }
 
+
 //get It members
 const getItMembers=async (req,res)=>{
   try{
@@ -82,3 +83,5 @@ const getItMembers=async (req,res)=>{
 }
 
 module.exports = { createUser, deleteUser, updateUser, getUser , getUserById,getItMembers};
+
+// module.exports = { createUser, deleteUser, updateUser, getUser , getUserById};

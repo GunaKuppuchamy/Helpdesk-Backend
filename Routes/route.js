@@ -8,13 +8,13 @@ const logincontroller=require('../Controllers/loginController')
 router.post("/addemp",logincontroller.middleWare,adminController.createUser);
 
 //To add new ticket
-router.post("/addticket",userController.addticket);
+router.post("/addticket",logincontroller.middleWare,userController.addticket);
 
 //To get tickets
 router.get("/getticket",logincontroller.middleWare,userController.getticket);
 
 //To get ticker by id
-router.get("/getuser/:id",userController.getbyid);
+router.get("/getTicket/:id",userController.getbyid);
 
 //To update by id
 router.put("/updateTicket/:id",logincontroller.middleWare);
@@ -36,6 +36,12 @@ router.get('/tickets/it',logincontroller.middleWare, userController.getItTicket)
 
 //To get It members
 router.get('/itMembers',adminController.getItMembers)
+
+// //To get user tickets
+// router.get('/tickets/user/:userid', userController.getuserticket);
+
+//To get It team tickets
+router.get('/tickets/it/:itid', userController.getItTicket);
 
 //To get all User Details
 router.get("/getUsers",logincontroller.middleWare,adminController.getUser);
@@ -68,6 +74,11 @@ router.post("/middleware",logincontroller.middleWare);
 
 //To refresh access Token
 // router.post("/refresktk",logincontroller.refreshToken);
+
+
+router.post('/sendotp', logincontroller.sendOtp);
+router.post('/verifyotp', logincontroller.verifyOtp);
+router.post('/resetpassword', logincontroller.resetPassword);
 
 module.exports=router;
 
