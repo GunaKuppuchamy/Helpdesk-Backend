@@ -115,17 +115,9 @@ const refreshToken = (req, res, next) => {
 };
 
 const logout = (req, res) => {
-  res.clearCookie('access_token', {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'none',
-  });
+  res.clearCookie('access_token');
 
-  res.clearCookie('refresh_token', {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'none',
-  });
+  res.clearCookie('refresh_token');
   return res.json({ message: 'Logged out successfully' });
 
 };

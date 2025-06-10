@@ -14,13 +14,13 @@ router.post("/addticket",logincontroller.middleWare,userController.addticket);
 router.get("/getticket",logincontroller.middleWare,userController.getticket);
 
 //To get ticker by id
-router.get("/getTicket/:id",userController.getbyid);
+router.get("/getTicket/:id",logincontroller.middleWare,userController.getbyid);
 
 //To update by id
-router.put("/updateTicket/:id",userController.putbyid);
+router.put("/updateTicket/:id",logincontroller.middleWare,userController.putbyid);
 
 //To delete by id
-router.delete("/delete/:id",userController.deletebyid);
+router.delete("/delete/:id",logincontroller.middleWare,userController.deletebyid);
 
 //To clear cookie while logout
 router.post("/logout",logincontroller.logout);
@@ -40,16 +40,16 @@ router.get('/itMembers',adminController.getItMembers)
 // router.get('/tickets/user/:userid', userController.getuserticket);
 
 //To get It team tickets
-router.get('/tickets/it/:itid', userController.getItTicket);
+// router.get('/tickets/it/:itid', userController.getItTicket);
 
 //To get all User Details
-router.get("/getUsers",adminController.getUser);
+router.get("/getUsers",logincontroller.middleWare,adminController.getUser);
 
 //To delete  User 
-router.delete("/deleteUser/:empId",adminController.deleteUser);
+router.delete("/deleteUser/:empId",logincontroller.middleWare,adminController.deleteUser);
 
 //To update  User Detail
-router.put("/updateUser/:empId",adminController.updateUser);
+router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updateUser);
 
 
 //To get User By Id
