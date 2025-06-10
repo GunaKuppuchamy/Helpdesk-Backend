@@ -104,9 +104,9 @@ const sendOtp = async (req, res) => {
     
     let targetUser = await ForgotUser.findOne({ email });
 
-
     if (!targetUser) {
-      return res.status(404).json({ message: 'User not found' });
+      const tempPassword = await bcrypt.hash('temp123', 10);
+      targetUser = new ForgotUser({ email, password: tempPassword });
     }
 
     targetUser.otp = otp;
