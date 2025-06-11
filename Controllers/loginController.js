@@ -195,8 +195,8 @@ const sendOtp = async (req, res) => {
     targetUser.password = hashedPassword;
         // console.log(hashedPassword,'hash');
 
-    targetUser.otp = null;
-    targetUser.otpTimestamp = null;
+    // targetUser.otp = null;
+    // targetUser.otpTimestamp = null;
     // console.log(targetUser,'Targetuser');
     
     await targetUser.save();
