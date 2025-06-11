@@ -4,16 +4,15 @@ const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
 const cookieParser = require('cookie-parser');
-const ForgotUser=require('../Models/User')
-const nodemailer=require('../nodemailer-config')
+const ForgotUser = require('../Models/User')
+const nodemailer = require('../nodemailer-config')
 
 const login = async (req, res) => {
 
-  const { email, password} = req.body;
-  // console.log(req.body);
+  const { email, password } = req.body;
 
   try {
-    const credentials = await User.findOne({ email: email});
+    const credentials = await User.findOne({ email: email });
 
     if (!credentials) {
       return res.status(404).json({ message: 'No user found' });
@@ -29,18 +28,18 @@ const login = async (req, res) => {
     console.log(payload);
 
     const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1m' });
-    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '1m' });
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '3m' });
 
     // Set cookies
     res.cookie('access_token', accessToken, {
-      maxAge: 1 * 60 * 1000,
+      httponly: true,
+      maxAge: 5 * 60 * 1000,
     });
 
     res.cookie('refresh_token', refreshToken, {
-      maxAge: 1 * 60 * 1000,
+      maxAge: 3 * 60 * 1000,
     });
-    // console.log("logged");
-    return res.status(200).json({ message: 'Logged in successfully',role: credentials.role,empid: credentials.empid  });
+    return res.status(200).json({ message: 'Logged in successfully', role: credentials.role, empid: credentials.empid });
   } catch (error) {
     return res.status(500).json({ message: 'Server error' });
   }
@@ -59,14 +58,12 @@ const middleWare = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired refresh token' });
       }
-      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
+      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '5m' });
       res.cookie('access_token', newAccessToken, {
-        maxAge: 1 * 60 * 1000,
+        maxAge: 5 * 60 * 1000,
       });
-      req.userid = user.empid; 
-      console.log("User (from refresh):", user);
+      req.userid = user.empid;
       next();
-      // return res.json({ message: 'Access token refreshed' });
     });
   } else {
     jwt.verify(token, SECRET_KEY, (err, user) => {
@@ -74,57 +71,46 @@ const middleWare = (req, res, next) => {
         return res.status(401).json({ message: 'Invalid or expired access token' });
       }
       // req.user = user;
-     req.userid = user.empid; 
-      console.log("User (from refresh):", user);
+      req.userid = user.empid;
       next();
-      //return res.status(200).json({ message: 'valid' });
     });
   }
 }
 
-// const refreshToken = (req, res, next) => {
-//   const refreshToken = req.cookies.refresh_token;
-//   if (!refreshToken) {
-//     return res.status(401).json({ message: 'Refresh token missing' });
-//   }
-//   jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
-//     if (err) {
-//       return res.status(401).json({ message: 'Invalid or expired refresh token' });
-//     }
-//     const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
-//     res.cookie('access_token', newAccessToken, {
-//       maxAge: 1 * 60 * 1000,
-//     });
-//     next();
-//     // return res.json({ message: 'Access token refreshed' });
-//   });
-// };
+const refreshToken = (req, res, next) => {
+  const refreshToken = req.cookies.refresh_token;
+  if (!refreshToken) {
+    return res.status(401).json({ message: 'Refresh token missing' });
+  }
+  jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
+    if (err) {
+      return res.json({ message: 'Invalid or expired refresh token' });
+    }
+    const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '2m' });
+    res.cookie('access_token', newAccessToken, {
+      maxAge: 2 * 60 * 1000,
+    });
+    next();
+    // return res.json({ message: 'Access token refreshed' });
+  });
+};
 
 const logout = (req, res) => {
-  res.clearCookie('access_token', {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'none',
-  });
-
-  res.clearCookie('refresh_token', {
-    httpOnly: false,
-    secure: false,
-    sameSite: 'none',
-  });
+  console.log("Logout called");
+  // Clear cookies
+   res.clearCookie('access_token');
+  res.clearCookie('refresh_token');
   return res.json({ message: 'Logged out successfully' });
 
 };
 
 
 //OTP
-
 const sendOtp = async (req, res) => {
   try {
     const { email } = req.body;
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    console.log('Generated OTP:', otp);
-    
+
     let targetUser = await ForgotUser.findOne({ email });
     if (!targetUser) {
       const tempPassword = await bcrypt.hash('temp123', 10);
@@ -163,7 +149,7 @@ const sendOtp = async (req, res) => {
 };
 
 
- const verifyOtp = async (req, res) => {
+const verifyOtp = async (req, res) => {
   try {
     const { email, otp } = req.body;
     const targetUser = await ForgotUser.findOne({ email });
@@ -183,25 +169,22 @@ const sendOtp = async (req, res) => {
 };
 
 
- const resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   try {
     const { email, newPassword } = req.body;
     const targetUser = await User.findOne({ email });
-    
-    if (!targetUser) return res.status(404).send('User not found');
-    
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    // console.log(newPassword);
-    targetUser.password = hashedPassword;
-        // console.log(hashedPassword,'hash');
 
-    // targetUser.otp = null;
-    // targetUser.otpTimestamp = null;
+    if (!targetUser) return res.status(404).send('User not found');
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    targetUser.password = hashedPassword;
+
+    targetUser.otp = null;
+    targetUser.otpTimestamp = null;
     // console.log(targetUser,'Targetuser');
     
     await targetUser.save();
-    // console.log(targetUser,'TargetuserAfter sAVE');
-   res.status(200).json({ message: 'Password Updated successfully' });
+    res.status(200).json({ message: 'Password Updated successfully' });
   } catch (err) {
     console.error(err);
     res.status(500).send('Server error');
@@ -210,4 +193,4 @@ const sendOtp = async (req, res) => {
 
 
 
-module.exports={login,logout,middleWare,sendOtp,verifyOtp,resetPassword}
+module.exports={login,refreshToken,logout,middleWare,sendOtp,verifyOtp,resetPassword}
