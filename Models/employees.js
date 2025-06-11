@@ -7,6 +7,6 @@ const UserSchema = new mongoose.Schema({
    phoneno:{type:String, required:true},
    bu:{type:String, required:true, enum:['DATA','DEX','ILD','IT','HR','SIMS','IAT']},
     role:{type:String, required:true,enum:['it','admin','user']}
-
+ 
 });
 module.exports=mongoose.model("employees",UserSchema);

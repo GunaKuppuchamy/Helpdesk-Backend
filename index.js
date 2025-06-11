@@ -16,6 +16,5 @@ mongoose.connect(url).then(() => {
     app.use(cookieParser())
     app.use("/", routes)
     app.listen(3002, () => {
-        console.log("connected")
     })
 })
