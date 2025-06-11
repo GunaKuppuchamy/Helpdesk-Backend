@@ -28,8 +28,8 @@ const login = async (req, res) => {
     const payload = { empid: credentials.empid, email: credentials.email };
     console.log(payload);
 
-    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '10m' });
-    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '10m' });
+    const accessToken = jwt.sign(payload, SECRET_KEY, { expiresIn: '1m' });
+    const refreshToken = jwt.sign(payload, REFRESH_SECRET_KEY, { expiresIn: '1m' });
 
     // Set cookies
     res.cookie('access_token', accessToken, {
@@ -37,7 +37,7 @@ const login = async (req, res) => {
     });
 
     res.cookie('refresh_token', refreshToken, {
-      maxAge: 10 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
     // console.log("logged");
     return res.status(200).json({ message: 'Logged in successfully',role: credentials.role,empid: credentials.empid  });
@@ -82,23 +82,23 @@ const middleWare = (req, res, next) => {
   }
 }
 
-const refreshToken = (req, res, next) => {
-  const refreshToken = req.cookies.refresh_token;
-  if (!refreshToken) {
-    return res.status(401).json({ message: 'Refresh token missing' });
-  }
-  jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
-    if (err) {
-      return res.json({ message: 'Invalid or expired refresh token' });
-    }
-    const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '2m' });
-    res.cookie('access_token', newAccessToken, {
-      maxAge: 2 * 60 * 1000,
-    });
-    next();
-    // return res.json({ message: 'Access token refreshed' });
-  });
-};
+// const refreshToken = (req, res, next) => {
+//   const refreshToken = req.cookies.refresh_token;
+//   if (!refreshToken) {
+//     return res.status(401).json({ message: 'Refresh token missing' });
+//   }
+//   jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
+//     if (err) {
+//       return res.status(401).json({ message: 'Invalid or expired refresh token' });
+//     }
+//     const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
+//     res.cookie('access_token', newAccessToken, {
+//       maxAge: 1 * 60 * 1000,
+//     });
+//     next();
+//     // return res.json({ message: 'Access token refreshed' });
+//   });
+// };
 
 const logout = (req, res) => {
   res.clearCookie('access_token', {
@@ -195,8 +195,8 @@ const sendOtp = async (req, res) => {
     targetUser.password = hashedPassword;
         // console.log(hashedPassword,'hash');
 
-    targetUser.otp = null;
-    targetUser.otpTimestamp = null;
+    // targetUser.otp = null;
+    // targetUser.otpTimestamp = null;
     // console.log(targetUser,'Targetuser');
     
     await targetUser.save();
@@ -210,4 +210,4 @@ const sendOtp = async (req, res) => {
 
 
 
-module.exports={login,refreshToken,logout,middleWare,sendOtp,verifyOtp,resetPassword}
+module.exports={login,logout,middleWare,sendOtp,verifyOtp,resetPassword}
