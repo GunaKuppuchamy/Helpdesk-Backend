@@ -18,7 +18,7 @@ A full-stack web application designed to manage support tickets within an organi
     
 **4. File Structure:**
 <pre>
-  /backend
+  /Helpdesk-Backend
 │
 ├── controllers/
 │   ├── authController.js
