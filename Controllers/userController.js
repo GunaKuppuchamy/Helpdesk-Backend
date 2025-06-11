@@ -70,7 +70,6 @@ const updateTicketById = async (req, res) => {
       };
 
       await transporter.sendMail(mailOptions);
-      console.log("Email sent for closed ticket.");
     }
     }
     else {
@@ -83,26 +82,13 @@ const updateTicketById = async (req, res) => {
   }
 };
 
-// DELETE - delete a ticket by ID
-// const deletebyid = async (req, res) => {
-//   try {
-//     const deleted = await Ticket.findByIdAndDelete(req.params.id);
-//     if (!deleted) return res.status(404).json({ message: 'Ticket not found' });
-//     res.status(200).json({ message: 'Ticket deleted' });
-//   } catch (err) {
-//     res.status(500).json({ message: 'Error deleting ticket', error: err.message });
-//   }
-// };
-
 
 //User Tickets - Fetch all ticket for a User
 const getUserTickets = async(req,res) => {
 
   try
   {
-    //console.log(req.user.empid);
     const tickets = await Ticket.find({userid:req.userid});
-    console.log(tickets)
      if (tickets.length===0) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
@@ -129,7 +115,6 @@ const getItTicket = async(req, res) => {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
 
-    console.log("Backend: Logged-in IT ID:", itId);
     res.status(200).json(tickets);
 
   } catch (err) {
