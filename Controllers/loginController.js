@@ -60,6 +60,7 @@ const middleWare = (req, res, next) => {
       }
       const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
       res.cookie('access_token', newAccessToken, {
+        httponly: true,
         maxAge: 5 * 60 * 1000,
       });
       req.userid = user.empid;
