@@ -100,7 +100,7 @@ const getItTicket = async(req, res) => {
     }
 
     const tickets = await Ticket.find({ itid: itId });
-
+ 
     if (!tickets.length) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
