@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Ticket = require('../Models/tickets');
-const nodemailer = require('nodemailer');
 const user=require('../Models/employees');
-
+const nodemailer = require('../nodemailer-config')
 
 // POST - create a new ticket
 const addTicket= async (req, res) => {
@@ -53,15 +52,6 @@ const updateTicketById = async (req, res) => {
       const userRecord = await user.findOne({ empid: updatedTicket.userid });
       if(userRecord && userRecord.email)
       {
-        let transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: 'itteamilink@gmail.com',
-          pass: 'aehl cdqf zxai rgud' 
-        }
-      });
-    
-
       const mailOptions = {
         from: 'itteamilink@gmail.com',
         to: userRecord.email, 
@@ -69,7 +59,7 @@ const updateTicketById = async (req, res) => {
         text: `Your ticket "${updatedTicket.subject}" has been closed. Thank you for using Helpdesk.`
       };
 
-      await transporter.sendMail(mailOptions);
+      await nodemailer.sendMail(mailOptions);
     }
     }
     else {
@@ -100,7 +90,7 @@ const getUserTickets = async(req,res) => {
   }
 };
 
-
+//IT Tickets - Fetch all the tickets assigned to specific IT member
 const getItTicket = async(req, res) => {
   try {
     const itId = req.userid;  
