@@ -54,7 +54,7 @@ router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updat
 
 
 //To get User By Id
-router.get("/getUserByID/:empid",adminController.getUserById);
+router.get("/getUserByID/:empid",logincontroller.middleWare,adminController.getUserById);
 
 
 //Authentication and Authorization
