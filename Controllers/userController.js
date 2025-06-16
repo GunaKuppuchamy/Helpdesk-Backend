@@ -112,6 +112,26 @@ const getItTicket = async(req, res) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const empid = req.userid;
+
+    if (!empid) {
+      return res.status(401).json({ message: 'Unauthorized: No empid found' });
+    }
+
+    const User = await user.findOne({ empid: empid });
+
+    if (!User) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json(User);
+  } catch (err) {
+    return res.status(500).json({ message: 'Error fetching user', error: err.message });
+  }
+};
 
 
-module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket};
+
+module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket,getCurrentUser};

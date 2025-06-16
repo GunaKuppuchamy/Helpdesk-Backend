@@ -42,6 +42,10 @@ router.get('/tickets/user',logincontroller.middleWare, userController.getUserTic
 //To get It team tickets
 router.get('/tickets/it',logincontroller.middleWare, userController.getItTicket);
 
+//To get Current Logged In User
+
+router.get('/currentUser', logincontroller.middleWare, userController.getCurrentUser);
+
 
 //Authentication and Authorization
 
