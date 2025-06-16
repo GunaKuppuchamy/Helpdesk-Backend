@@ -3,9 +3,8 @@ const SECRET_KEY = 'key_to_authenticate';
 const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
-const cookieParser = require('cookie-parser');
-const ForgotUser = require('../Models/User')
-const nodemailer = require('../nodemailer-config')
+const ForgotUser = require('../Models/User');
+const nodemailer = require('../nodemailer-config');
 
 const login = async (req, res) => {
 
@@ -33,10 +32,11 @@ const login = async (req, res) => {
     // Set cookies
     res.cookie('access_token', accessToken, {
       httponly: true,
-      maxAge: 5 * 60 * 1000,
+      maxAge: 1 * 60 * 1000,
     });
 
     res.cookie('refresh_token', refreshToken, {
+      httponly: true,
       maxAge: 3 * 60 * 1000,
     });
     return res.status(200).json({ message: 'Logged in successfully', role: credentials.role, empid: credentials.empid });
@@ -58,9 +58,10 @@ const middleWare = (req, res, next) => {
       if (err) {
         return res.status(401).json({ message: 'Invalid or expired refresh token' });
       }
-      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '5m' });
+      const newAccessToken = jwt.sign({ empid: user.empid, email: user.email }, SECRET_KEY, { expiresIn: '1m' });
       res.cookie('access_token', newAccessToken, {
-        maxAge: 5 * 60 * 1000,
+        httponly: true,
+        maxAge: 1 * 60 * 1000,
       });
       req.userid = user.empid;
       next();
@@ -76,24 +77,6 @@ const middleWare = (req, res, next) => {
     });
   }
 }
-
-const refreshToken = (req, res, next) => {
-  const refreshToken = req.cookies.refresh_token;
-  if (!refreshToken) {
-    return res.status(401).json({ message: 'Refresh token missing' });
-  }
-  jwt.verify(refreshToken, REFRESH_SECRET_KEY, (err, user) => {
-    if (err) {
-      return res.json({ message: 'Invalid or expired refresh token' });
-    }
-    const newAccessToken = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '2m' });
-    res.cookie('access_token', newAccessToken, {
-      maxAge: 2 * 60 * 1000,
-    });
-    next();
-    // return res.json({ message: 'Access token refreshed' });
-  });
-};
 
 const logout = (req, res) => {
   console.log("Logout called");
@@ -116,11 +99,6 @@ const sendOtp = async (req, res) => {
       const tempPassword = await bcrypt.hash('temp123', 10);
       targetUser = new ForgotUser({ email, password: tempPassword });
     }
-
-
-    // if (!targetUser) {
-    //   return res.status(404).json({ message: 'User not found' });
-    // }
 
     targetUser.otp = otp;
     targetUser.otpTimestamp = new Date();
@@ -193,4 +171,4 @@ const resetPassword = async (req, res) => {
 
 
 
-module.exports={login,refreshToken,logout,middleWare,sendOtp,verifyOtp,resetPassword}
+module.exports={login,logout,middleWare,sendOtp,verifyOtp,resetPassword}
