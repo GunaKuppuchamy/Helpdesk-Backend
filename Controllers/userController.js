@@ -1,6 +1,6 @@
 const Ticket = require('../Models/tickets');
-const nodemailer = require('../nodemailer-config');
 const user=require('../Models/employees');
+const nodemailer = require('../nodemailer-config')
 
 // POST - create a new ticket
 const addTicket= async (req, res) => {
@@ -88,7 +88,7 @@ const getUserTickets = async(req,res) => {
   }
 };
 
-
+//IT Tickets - Fetch all the tickets assigned to specific IT member
 const getItTicket = async(req, res) => {
   try {
     const itId = req.userid;  //fetched from middleware
@@ -98,7 +98,7 @@ const getItTicket = async(req, res) => {
     }
 
     const tickets = await Ticket.find({ itid: itId });
-
+ 
     if (!tickets.length) {
       return res.status(404).json({ message: 'No tickets found for this user' });
     }
@@ -110,6 +110,26 @@ const getItTicket = async(req, res) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const empid = req.userid;
+
+    if (!empid) {
+      return res.status(401).json({ message: 'Unauthorized: No empid found' });
+    }
+
+    const User = await user.findOne({ empid: empid });
+
+    if (!User) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    return res.status(200).json(User);
+  } catch (err) {
+    return res.status(500).json({ message: 'Error fetching user', error: err.message });
+  }
+};
 
 
-module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket};
+
+module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket,getCurrentUser};

@@ -71,18 +71,6 @@ const getUserById = async (req,res) =>{
 }
 
 
-//get It members
-const getItMembers=async (req,res)=>{
-  try{
-   const itMembers=await User.find({role:'it'});
-   return res.json(itMembers)
-  }catch(err)
-  {
-    return res.status(500).json({message : 'Error While fetching user',error : err.message})
-  }
-}
 
+module.exports = { createUser, deleteUser, updateUser, getUsers , getUserById};
 
-module.exports = { createUser, deleteUser, updateUser, getUsers , getUserById,getItMembers};
-
-// module.exports = { createUser, deleteUser, updateUser, getUser , getUserById};
