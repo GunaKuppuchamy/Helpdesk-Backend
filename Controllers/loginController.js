@@ -3,8 +3,8 @@ const SECRET_KEY = 'key_to_authenticate';
 const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
-const ForgotUser = require('../Models/User')
-const nodemailer = require('../nodemailer-config')
+const ForgotUser = require('../Models/User');
+const nodemailer = require('../nodemailer-config');
 
 const login = async (req, res) => {
 
@@ -77,7 +77,6 @@ const middleWare = (req, res, next) => {
   }
 }
 
-
 const logout = (req, res) => {
   console.log("Logout called");
   // Clear cookies
@@ -99,7 +98,6 @@ const sendOtp = async (req, res) => {
       const tempPassword = await bcrypt.hash('temp123', 10);
       targetUser = new ForgotUser({ email, password: tempPassword });
     }
-
 
     targetUser.otp = otp;
     targetUser.otpTimestamp = new Date();
