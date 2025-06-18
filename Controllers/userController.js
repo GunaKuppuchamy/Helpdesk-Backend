@@ -72,7 +72,7 @@ const updateTicketById = async (req, res) => {
 
 
 //User Tickets - Fetch all ticket for a User
-const getUserTickets = async(req,res) => {
+/*const getUserTickets = async(req,res) => {
 
   try
   {
@@ -87,6 +87,7 @@ const getUserTickets = async(req,res) => {
     res.status(500).json({message:'Error fetching user tickets' , error:err.message});
   }
 };
+
 
 //IT Tickets - Fetch all the tickets assigned to specific IT member
 const getItTicket = async(req, res) => {
@@ -108,7 +109,7 @@ const getItTicket = async(req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Error fetching user tickets', error: err.message });
   }
-};
+};*/
 
 const getCurrentUser = async (req, res) => {
   try {
@@ -130,6 +131,35 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
+// single function instead of seperate one for it and user
+const getCurrentUserTickets = async(req,res) => {
+
+  const currId=req.userid;
+  const curUser = await user.findOne({empid:currId});
+  let tickets=[];
+  try
+  {
+    
+    if(curUser.role=='it')
+      tickets = await Ticket.find({itid:currId});
+    else if(curUser.role=='user')
+      tickets = await Ticket.find({userid:currId});
+    else
+      return res.status(401).json({message:'Not an authenticated user'});
 
 
-module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket,getCurrentUser};
+    if (tickets.length===0) {
+      return res.status(404).json({ message: 'No tickets found for this user' });
+    }
+    res.status(200).json(tickets)
+  }
+  catch (err)
+  {
+    res.status(500).json({message:'Error fetching user tickets' , error:err.message});
+  }
+};
+
+
+module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket,getCurrentUser, getCurrentUserTickets};
+
+

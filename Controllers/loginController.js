@@ -3,8 +3,8 @@ const SECRET_KEY = 'key_to_authenticate';
 const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
-const ForgotUser = require('../Models/User')
-const nodemailer = require('../nodemailer-config')
+const ForgotUser = require('../Models/User');
+const nodemailer = require('../nodemailer-config');
 
 const login = async (req, res) => {
 

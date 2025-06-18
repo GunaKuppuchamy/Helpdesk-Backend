@@ -37,10 +37,10 @@ router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updat
 router.get("/getUserByID/:empid",logincontroller.middleWare, adminController.getUserById);
 
 //To get user tickets
-router.get('/tickets/user',logincontroller.middleWare, userController.getUserTickets);
+router.get('/tickets/user',logincontroller.middleWare, userController.getCurrentUserTickets);
 
 //To get It team tickets
-router.get('/tickets/it',logincontroller.middleWare, userController.getItTicket);
+//router.get('/tickets/it',logincontroller.middleWare, userController.getItTicket);
 
 //To get Current Logged In User
 
