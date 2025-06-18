@@ -1,5 +1,4 @@
-const express = require('express');
-const router = express.Router();
+
 const Ticket = require('../Models/tickets');
 const user=require('../Models/employees');
 const nodemailer = require('../nodemailer-config')
