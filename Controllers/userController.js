@@ -71,45 +71,6 @@ const updateTicketById = async (req, res) => {
 };
 
 
-//User Tickets - Fetch all ticket for a User
-/*const getUserTickets = async(req,res) => {
-
-  try
-  {
-    const tickets = await Ticket.find({userid:req.userid});
-     if (tickets.length===0) {
-      return res.status(404).json({ message: 'No tickets found for this user' });
-    }
-    res.status(200).json(tickets)
-  }
-  catch (err)
-  {
-    res.status(500).json({message:'Error fetching user tickets' , error:err.message});
-  }
-};
-
-
-//IT Tickets - Fetch all the tickets assigned to specific IT member
-const getItTicket = async(req, res) => {
-  try {
-    const itId = req.userid;  //fetched from middleware
-
-    if (!itId) {
-      return res.status(400).json({ message: 'User ID missing' });
-    }
-
-    const tickets = await Ticket.find({ itid: itId });
- 
-    if (!tickets.length) {
-      return res.status(404).json({ message: 'No tickets found for this user' });
-    }
-
-    res.status(200).json(tickets);
-
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching user tickets', error: err.message });
-  }
-};*/
 
 const getCurrentUser = async (req, res) => {
   try {
@@ -160,6 +121,6 @@ const getCurrentUserTickets = async(req,res) => {
 };
 
 
-module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getUserTickets,getItTicket,getCurrentUser, getCurrentUserTickets};
+module.exports = {addTicket,getTicket,getTicketByid,updateTicketById,getCurrentUser, getCurrentUserTickets};
 
 
