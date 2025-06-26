@@ -28,6 +28,11 @@ function setupSwagger(app) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:4200');
     next();
   }, swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+  app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+  });
 }
 
 module.exports = setupSwagger;
