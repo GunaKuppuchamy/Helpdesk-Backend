@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
-const SECRET_KEY = 'key_to_authenticate';
-const REFRESH_SECRET_KEY = 'yek_terces_hserfer';
+const SECRET_KEY = process.env.ACCESS_SECRET_KEY;
+const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY;
+
 const User = require('../Models/employees');
 const bcrypt = require('bcryptjs');
 const ForgotUser = require('../Models/User');
