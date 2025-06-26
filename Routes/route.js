@@ -1,10 +1,84 @@
-const express=require('express')
-const router=express.Router()
-const adminController=require('../Controllers/adminController');
+const express = require('express');
+const router = express.Router();
+const adminController = require('../Controllers/adminController');
 const userController = require('../Controllers/userController');
-const logincontroller=require('../Controllers/loginController')
+const logincontroller = require('../Controllers/loginController');
 
-//Ticket Routes
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Ticket:
+ *       type: object
+ *       required:
+ *         - userid
+ *         - ticketid
+ *         - subject
+ *         - description
+ *         - raiseddate
+ *         - duedate
+ *         - status
+ *         - priroty
+ *         - categeory
+ *         - itid
+ *       properties:
+ *         userid:
+ *           type: string
+ *         ticketid:
+ *           type: string
+ *         subject:
+ *           type: string
+ *         description:
+ *           type: string
+ *         raiseddate:
+ *           type: string
+ *           format: date
+ *         duedate:
+ *           type: string
+ *           format: date
+ *         status:
+ *           type: string
+ *           enum: [open, onHold, closed, cancelled]
+ *         priroty:
+ *           type: string
+ *           enum: [high, medium, low]
+ *         categeory:
+ *           type: string
+ *           enum: [Software, Hardware, Network, Asset Request, Email]
+ *         itid:
+ *           type: string
+ * 
+ *     User:
+ *       type: object
+ *       required:
+ *         - empid
+ *         - name
+ *         - email
+ *         - password
+ *         - phoneno
+ *         - bu
+ *         - role
+ *       properties:
+ *         empid:
+ *           type: string
+ *         name:
+ *           type: string
+ *         email:
+ *           type: string
+ *         password:
+ *           type: string
+ *         phoneno:
+ *           type: string
+ *         bu:
+ *           type: string
+ *           enum: [DATA, DEX, ILD, IT, HR, SIMS, IAT, Admin]
+ *         role:
+ *           type: string
+ *           enum: [it, admin, user]
+ */
+
+
+// ---------------- Ticket Routes ---------------- //
 
 /**
  * @swagger
@@ -17,17 +91,12 @@ const logincontroller=require('../Controllers/loginController')
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               description:
- *                 type: string
+ *             $ref: '#/components/schemas/Ticket'
  *     responses:
  *       201:
  *         description: Ticket created successfully
  */
-router.post("/addticket",logincontroller.middleWare,userController.addTicket);
+router.post("/addticket", logincontroller.middleWare, userController.addTicket);
 
 /**
  * @swagger
@@ -39,7 +108,7 @@ router.post("/addticket",logincontroller.middleWare,userController.addTicket);
  *       200:
  *         description: List of tickets
  */
-router.get("/getticket",logincontroller.middleWare,userController.getTicket);
+router.get("/getticket", logincontroller.middleWare, userController.getTicket);
 
 /**
  * @swagger
@@ -57,7 +126,7 @@ router.get("/getticket",logincontroller.middleWare,userController.getTicket);
  *       200:
  *         description: Ticket details
  */
-router.get("/getTicket/:id",logincontroller.middleWare,userController.getTicketByid);
+router.get("/getTicket/:id", logincontroller.middleWare, userController.getTicketByid);
 
 /**
  * @swagger
@@ -76,19 +145,26 @@ router.get("/getTicket/:id",logincontroller.middleWare,userController.getTicketB
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               title:
- *                 type: string
- *               description:
- *                 type: string
+ *             $ref: '#/components/schemas/Ticket'
  *     responses:
  *       200:
  *         description: Ticket updated successfully
  */
-router.put("/updateTicket/:id",logincontroller.middleWare,userController.updateTicketById);
+router.put("/updateTicket/:id", logincontroller.middleWare, userController.updateTicketById);
 
-//User Routes
+/**
+ * @swagger
+ * /tickets/user:
+ *   get:
+ *     summary: Get tickets for current user
+ *     tags: [Tickets]
+ *     responses:
+ *       200:
+ *         description: List of user's tickets
+ */
+router.get('/tickets/user', logincontroller.middleWare, userController.getCurrentUserTickets);
+
+// ---------------- User Routes ---------------- //
 
 /**
  * @swagger
@@ -101,19 +177,12 @@ router.put("/updateTicket/:id",logincontroller.middleWare,userController.updateT
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       201:
  *         description: User created successfully
  */
-
-
-router.post("/addemp",logincontroller.middleWare,adminController.createUser);
+router.post("/addemp", logincontroller.middleWare, adminController.createUser);
 
 /**
  * @swagger
@@ -125,7 +194,7 @@ router.post("/addemp",logincontroller.middleWare,adminController.createUser);
  *       200:
  *         description: List of users
  */
-router.get("/getUsers",logincontroller.middleWare,adminController.getUsers);
+router.get("/getUsers", logincontroller.middleWare, adminController.getUsers);
 
 /**
  * @swagger
@@ -143,7 +212,7 @@ router.get("/getUsers",logincontroller.middleWare,adminController.getUsers);
  *       200:
  *         description: User deleted successfully
  */
-router.delete("/deleteUser/:empId",logincontroller.middleWare,adminController.deleteUser);
+router.delete("/deleteUser/:empId", logincontroller.middleWare, adminController.deleteUser);
 
 /**
  * @swagger
@@ -162,17 +231,12 @@ router.delete("/deleteUser/:empId",logincontroller.middleWare,adminController.de
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               email:
- *                 type: string
+ *             $ref: '#/components/schemas/User'
  *     responses:
  *       200:
  *         description: User updated successfully
  */
-router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updateUser);
+router.put("/updateUser/:empId", logincontroller.middleWare, adminController.updateUser);
 
 /**
  * @swagger
@@ -190,19 +254,7 @@ router.put("/updateUser/:empId",logincontroller.middleWare,adminController.updat
  *       200:
  *         description: User details
  */
-router.get("/getUserByID/:empid",logincontroller.middleWare, adminController.getUserById);
-
-/**
- * @swagger
- * /tickets/user:
- *   get:
- *     summary: Get tickets for current user
- *     tags: [Tickets]
- *     responses:
- *       200:
- *         description: List of user's tickets
- */
-router.get('/tickets/user',logincontroller.middleWare, userController.getCurrentUserTickets);
+router.get("/getUserByID/:empid", logincontroller.middleWare, adminController.getUserById);
 
 /**
  * @swagger
@@ -215,6 +267,8 @@ router.get('/tickets/user',logincontroller.middleWare, userController.getCurrent
  *         description: Current user details
  */
 router.get('/currentUser', logincontroller.middleWare, userController.getCurrentUser);
+
+// ---------------- Auth Routes ---------------- //
 
 /**
  * @swagger
@@ -239,10 +293,7 @@ router.get('/currentUser', logincontroller.middleWare, userController.getCurrent
  *       401:
  *         description: Unauthorized
  */
-
-
-//Login Routes
-router.post("/login",logincontroller.login);
+router.post("/login", logincontroller.login);
 
 /**
  * @swagger
@@ -254,19 +305,7 @@ router.post("/login",logincontroller.login);
  *       200:
  *         description: Logout successful
  */
-router.post("/logout",logincontroller.logout);
-
-/**
- * @swagger
- * /middleware:
- *   post:
- *     summary: Verify token middleware
- *     tags: [Auth]
- *     responses:
- *       200:
- *         description: Token verified
- */
-router.post("/middleware",logincontroller.middleWare);
+router.post("/logout", logincontroller.logout);
 
 /**
  * @swagger
@@ -334,7 +373,6 @@ router.post('/verifyotp', logincontroller.verifyOtp);
  *         description: Password reset successful
  */
 router.post('/resetpassword', logincontroller.resetPassword);
-
 
 //To clear cookie while logout
 router.post("/logout",logincontroller.logout);
