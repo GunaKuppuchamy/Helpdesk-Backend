@@ -5,8 +5,7 @@ const userController = require('../Controllers/userController');
 const logincontroller=require('../Controllers/loginController');
 const healthController = require('../Controllers/healthController');
 
-// Health Check Route
-router.get('/health', healthController.healthCheck);
+
 
 /**
  * @swagger
@@ -383,6 +382,20 @@ router.post("/logout",logincontroller.logout);
 
 //middleware to verify token
 router.post("/middleware",logincontroller.middleWare);
+
+/**
+ * @swagger
+ * /health:
+ *   get:
+ *     summary: Health check endpoint
+ *     tags: [Health]
+ *     responses:
+ *       200:
+ *         description: Service is up and running
+ */
+
+// Health Check Route
+router.get('/health', healthController.healthCheck);
 
 module.exports=router;
 
