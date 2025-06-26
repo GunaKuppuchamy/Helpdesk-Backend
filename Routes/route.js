@@ -2,7 +2,11 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../Controllers/adminController');
 const userController = require('../Controllers/userController');
-const logincontroller = require('../Controllers/loginController');
+const logincontroller=require('../Controllers/loginController');
+const healthController = require('../Controllers/healthController');
+
+// Health Check Route
+router.get('/health', healthController.healthCheck);
 
 /**
  * @swagger

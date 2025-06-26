@@ -17,7 +17,7 @@ const addTicket= async (req, res) => {
   }
 };
 
-// // GET - fetch all tickets
+// GET - fetch all tickets
 const getTicket=async (req, res) => {
   try {
     const tickets = await Ticket.find();
